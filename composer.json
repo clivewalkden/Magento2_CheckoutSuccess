@@ -1,0 +1,15 @@
+{
+  "name": "sozodesign/checkout-success",
+  "description": "SOZO Design module to keep checkout success page available for styling",
+  "type": "magento2-module",
+  "license": "OSL",
+  "require": {
+    "php": "~5.5.0|~5.6.0|~7.0.0"
+  },
+  "autoload": {
+    "files": [ "registration.php" ],
+    "psr-4": {
+      "Sozo\\CheckoutSuccess\\": ""
+    }
+  }
+}
