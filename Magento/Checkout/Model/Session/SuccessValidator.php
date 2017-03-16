@@ -1,6 +1,6 @@
 <?php
 
-namespace Vendor\Module\Plugin\Magento\Checkout\Model\Session;
+namespace Sozo\CheckoutSuccess\Magento\Checkout\Model\Session;
 
 use Magento\Framework\Api\Search\SearchCriteriaFactory;
 use Magento\Sales\Model\Order;

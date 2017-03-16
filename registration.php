@@ -4,6 +4,6 @@
  */
 \Magento\Framework\Component\ComponentRegistrar::register(
     \Magento\Framework\Component\ComponentRegistrar::MODULE,
-    'Sozo_Checkout_Success',
+    'Sozo_CheckoutSuccess',
     __DIR__
 );
