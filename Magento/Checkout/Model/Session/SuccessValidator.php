@@ -1,4 +1,7 @@
 <?php
+/**
+ * Copyright (c) 2017 SOZO Design. All rights reserved.
+ */
 
 namespace Sozo\CheckoutSuccess\Magento\Checkout\Model\Session;
 
@@ -16,12 +19,22 @@ class SuccessValidator
     /**
      * @var \Magento\Checkout\Model\Session
      */
-    protected $checkoutSession;
+    protected $_checkoutSession;
 
     /**
      * @var \Magento\Sales\Model\ResourceModel\Order\CollectionFactory
      */
-    protected $orderCollectionFactory;
+    protected $_orderCollectionFactory;
+
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $_logger;
+
+    /**
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     */
+    protected $_scopeConfig;
 
     /**
      * SuccessValidator constructor.
@@ -29,11 +42,15 @@ class SuccessValidator
      * @param \Magento\Checkout\Model\Session $checkoutSession
      */
     public function __construct(
+        \Psr\Log\LoggerInterface $logger, //log injection
         \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
-        \Magento\Checkout\Model\Session $checkoutSession
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
     ) {
-        $this->checkoutSession = $checkoutSession;
-        $this->orderCollectionFactory = $orderCollectionFactory;
+        $this->_logger = $logger;
+        $this->_checkoutSession = $checkoutSession;
+        $this->_orderCollectionFactory = $orderCollectionFactory;
+        $this->_scopeConfig = $scopeConfig;
     }
 
     /**
@@ -43,20 +60,29 @@ class SuccessValidator
      */
     public function afterIsValid(\Magento\Checkout\Model\Session\SuccessValidator $successValidator, $returnValue)
     {
-        /** @var Order $order */
-        $order = $this->orderCollectionFactory->create()
-            ->setPageSize(1)
-            ->setOrder('entity_id', 'DESC')
-            ->addFieldToFilter('status', ['eq' => 'complete'])
-            ->getFirstItem();
+        $this->_logger->addDebug('after called');
 
-        if ($order->getId()) {
-            $this->checkoutSession->setLastOrderId($order->getId());
-            $this->checkoutSession->setLastQuoteId($order->getQuoteId());
-            $this->checkoutSession->setLastSuccessQuoteId($order->getQuoteId());
-            return true;
+        if ($this->_scopeConfig->getValue('dev/checkoutsuccess/enable', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
+            /** @var Order $order */
+            $order = $this->_orderCollectionFactory->create()
+                ->setPageSize(1)
+                ->setOrder('entity_id', 'DESC')
+                ->addFieldToFilter('status', ['in' => ['complete', 'processing']])
+                ->getFirstItem();
+            $this->_logger->addDebug('Order ID: ' . $order->getId());
+            $this->_logger->addDebug('Customer Email: ' . $order->getCustomerEmail());
+
+            if ($order->getId()) {
+                $this->_logger->addDebug('order found');
+                $this->_checkoutSession->setLastOrderId($order->getId());
+                $this->_checkoutSession->setLastQuoteId($order->getQuoteId());
+                $this->_checkoutSession->setLastSuccessQuoteId($order->getQuoteId());
+                $this->_logger->addDebug('return true');
+                return true;
+            }
         }
 
+        $this->_logger->addDebug('return default');
         return $returnValue;
     }
 }
