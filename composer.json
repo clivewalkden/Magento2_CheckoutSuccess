@@ -1,15 +1,24 @@
 {
-  "name": "sozodesign/checkout-success",
-  "description": "SOZO Design module to keep checkout success page available for styling",
+  "name": "clivewalkden/checkout-success",
+  "description": "A plugin for Magento 2 that keeps the Checkout Success page visible for styling on refresh",
   "type": "magento2-module",
-  "license": "OSL",
+  "homepage": "https://github.com/clivewalkden/Magento2_CheckoutSuccess",
+  "authors": [
+    {
+      "name": "Clive Walkden",
+      "email": "clivewalkden@gmail.com",
+      "homepage": "https://clivewalkden.co.uk"
+    }
+  ],
+  "license": "OSL-3",
   "require": {
-    "php": "~5.5.0|~5.6.0|~7.0.0"
+    "php": "~5.5.0|~5.6.0|~7.0.0",
+    "magento/framework": ">=100.0.0"
   },
   "autoload": {
     "files": [ "registration.php" ],
     "psr-4": {
-      "Sozo\\CheckoutSuccess\\": ""
+      "CliveWalkden\\CheckoutSuccess\\": ""
     }
   }
 }

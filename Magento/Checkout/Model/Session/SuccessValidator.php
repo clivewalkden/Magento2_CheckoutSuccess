@@ -1,9 +1,22 @@
 <?php
 /**
- * Copyright (c) 2017 SOZO Design. All rights reserved.
+ * Clive Walkden
+ *
+ * NOTICE OF LICENSE
+ *
+ * This source file is subject to the Open Software License (OSL 3.0)
+ * that is bundled with this package in the file LICENSE.
+ * It is also available through the world-wide-web at this URL:
+ * http://opensource.org/licenses/osl-3.0.php
+ *
+ * @category    Clive Walkden
+ * @package     CliveWalkden_CheckoutSuccess
+ * @copyright   Copyright (c) 2017 Clive Walkden (https://clivewalkden.co.uk)
+ * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
+ *
  */
 
-namespace Sozo\CheckoutSuccess\Magento\Checkout\Model\Session;
+namespace CliveWalkden\CheckoutSuccess\Magento\Checkout\Model\Session;
 
 use Magento\Framework\Api\Search\SearchCriteriaFactory;
 use Magento\Sales\Model\Order;
