@@ -11,7 +11,7 @@
  *
  * @category    Clive Walkden
  * @package     CliveWalkden_CheckoutSuccess
- * @copyright   Copyright (c) 2017 Clive Walkden (https://clivewalkden.co.uk)
+ * @copyright   Copyright (c) 2018 Clive Walkden (https://clivewalkden.co.uk)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *
  */

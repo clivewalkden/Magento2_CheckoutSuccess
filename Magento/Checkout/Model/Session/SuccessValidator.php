@@ -11,17 +11,23 @@
  *
  * @category    Clive Walkden
  * @package     CliveWalkden_CheckoutSuccess
- * @copyright   Copyright (c) 2017 Clive Walkden (https://clivewalkden.co.uk)
+ * @copyright   Copyright (c) 2018 Clive Walkden (https://clivewalkden.co.uk)
  * @license     http://opensource.org/licenses/osl-3.0.php  Open Software License (OSL 3.0)
  *
  */
 
 namespace CliveWalkden\CheckoutSuccess\Magento\Checkout\Model\Session;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Api\Search\SearchCriteriaFactory;
+use Magento\Checkout\Model\Session;
+use Magento\Checkout\Model\Session\SuccessValidator as MagentoSuccessValidator;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\OrderRepository;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
+use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
+use Magento\Store\Model\ScopeInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class SuccessValidator
@@ -51,14 +57,16 @@ class SuccessValidator
 
     /**
      * SuccessValidator constructor.
-     * @param OrderRepository $orderRepository
-     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param LoggerInterface $logger
+     * @param CollectionFactory $orderCollectionFactory
+     * @param Session $checkoutSession
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        \Psr\Log\LoggerInterface $logger, //log injection
-        \Magento\Sales\Model\ResourceModel\Order\CollectionFactory $orderCollectionFactory,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        LoggerInterface $logger, //log injection
+        CollectionFactory $orderCollectionFactory,
+        Session $checkoutSession,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->_logger = $logger;
         $this->_checkoutSession = $checkoutSession;
@@ -71,11 +79,12 @@ class SuccessValidator
      * @param boolean $returnValue
      * @return boolean
      */
-    public function afterIsValid(\Magento\Checkout\Model\Session\SuccessValidator $successValidator, $returnValue)
+    public function afterIsValid(MagentoSuccessValidator $successValidator, $returnValue)
     {
         $this->_logger->addDebug('after called');
 
-        if ($this->_scopeConfig->getValue('dev/checkoutsuccess/enable', \Magento\Store\Model\ScopeInterface::SCOPE_STORE)) {
+        if ($this->_scopeConfig->getValue('dev/checkoutsuccess/enable',
+            ScopeInterface::SCOPE_STORE)) {
             /** @var Order $order */
             $order = $this->_orderCollectionFactory->create()
                 ->setPageSize(1)
